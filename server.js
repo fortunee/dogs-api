@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import request from 'request';
 import redis from 'redis';
-import { REFUSED } from 'dns';
 
 const app = express();
 const router = express.Router();
