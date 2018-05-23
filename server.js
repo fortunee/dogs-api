@@ -11,13 +11,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Populate DB
-request('https://dog.ceo/api/breed/african/images', (error, response, body) => {
+request.get('https://dog.ceo/api/breed/african/images', (error, response, body) => {
     if (error) {
         return error;
     }
 
     if (response && response.statusCode === 200) {
-        redisClient.set('dogs', `${body.message}`);
+        const data = JSON.parse(body);
+        redisClient.set('dogs', JSON.stringify(data.message));
     }
 })
 
@@ -27,7 +28,9 @@ router.get('/dogs', (req, res) => {
         if (err) {
             return err;
         }
-        return res.send({ dogs: JSON.parse(result) });
+        if (result) {
+            return res.send({ dogs: JSON.parse(result) });
+        }
     })
 });
 
